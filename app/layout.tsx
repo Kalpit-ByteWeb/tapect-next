@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Lexend, Manrope } from "next/font/google";
 import "./globals.css";
 import AnalyticsLoader from "@/components/layouts/AnalyticsLoader"
+import Header from "@/components/layouts/HeaderAndFooter/Header";
+import Footer from "@/components/layouts/HeaderAndFooter/Footer";
 
 // import { getSEOData } from "@/libs/Assets/seo";
 
@@ -62,7 +64,9 @@ export default function RootLayout({
     <html lang="en" className={`${lexend.variable} ${manrope.variable}`}>
       <body className="antialiased">
         <AnalyticsLoader />
+        <Header/>
         {children}
+        <Footer/>
       </body>
     </html>
   );
