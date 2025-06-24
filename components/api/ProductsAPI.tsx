@@ -3,7 +3,89 @@ import axios from "axios";
 import { getDomain, getLocaleByDomain } from "@/libs/Assets/DomainWiseData";
 
 const API_URL_BASE = process.env.NEXT_PUBLIC_API_URL;
+export interface StrapiProduct {
+  id: number;
+  ProductName: string;
+  ProductID: string;
+  ProductPrice: string;
+  ProductDescription: string;
+  ProductImage: ProductImageData[];
+  Currency: string;
+  single_product: SingleProductData | null;
+  OfferPrice?: string;
+}
+interface ProductImageData {
+  id: number;
+  url: string;
+  alternativeText: string;
+  formats: any;
+}
 
+interface SingleProductData {
+  id: number;
+  documentId: string;
+  ProductName: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  PageSections: PageSection[];
+}
+
+interface PageSection {
+  __component: string;
+  id: number;
+  BulletPoints?: BulletPoint[];
+  Title?: string | null;
+  Image?: any | null;
+  Accordian?: AccordionItem[];
+  Description?: any | null;
+  ButtonText?: string | null;
+  ButtonUrl?: string | null;
+  TitleHighlight?: string | null;
+  FeatureStructure?: FeatureStructure[];
+  IconBox?: IconBox[];
+}
+
+export interface BulletPoint {
+  id: number;
+  points: string;
+}
+
+export interface AccordionItem {
+  id: number;
+  Question: string;
+  Answer: string;
+  Image: ProductImageData | null;
+}
+
+export interface FeatureStructure {
+  id: number;
+  FeatureTitle: string;
+  FeatureDescription: any[];
+  FeatureButtonText?: string | null;
+  FeatureButtonUrl?: string | null;
+  FeatureImage?: ProductImageData[] | null;
+}
+
+export interface IconBox {
+  id: number;
+  IconBoxTitle: string;
+  IconBoxDescription: any[];
+  IconUrl?: ProductImageData | null;
+}
+
+interface ApiResponse {
+  data: StrapiProduct[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
 const getPopulateQuery = (): string => {
   return [
     "populate[ProductImage][populate]=*",
