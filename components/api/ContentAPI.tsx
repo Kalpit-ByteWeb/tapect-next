@@ -74,10 +74,10 @@ export const fetchTab = async (): Promise<ApiResponse> => {
   }
 };
 
-export const fetchCentraliedSection = async (): Promise<ApiResponse> => {
+export const fetchCentraliedSection = async (domain?: string): Promise<ApiResponse> => {
   try {
     const response = await axios.get(
-      buildApiUrl("[layout.centralised-management]")
+      buildApiUrl("[layout.centralised-management]", true, domain)
     );
     return response.data;
   } catch (error: any) {
@@ -98,9 +98,9 @@ export const fetchIconList = async (): Promise<ApiResponse> => {
   }
 };
 
-export const fetchCounter = async (): Promise<ApiResponse> => {
+export const fetchCounter = async (domain?: string): Promise<ApiResponse> => {
   try {
-    const response = await axios.get(buildApiUrl("[layout.coutner]"));
+    const response = await axios.get(buildApiUrl("[layout.coutner]", true, domain));
     return response.data;
   } catch (error: any) {
     console.error("Error fetching Counter:", error);
@@ -108,10 +108,10 @@ export const fetchCounter = async (): Promise<ApiResponse> => {
   }
 };
 
-export const fetchCounterIconBox = async (): Promise<ApiResponse> => {
+export const fetchCounterIconBox = async (domain?: string): Promise<ApiResponse> => {
   try {
     const response = await axios.get(
-      buildApiUrl("[layout.coutner][populate][IconBox]")
+      buildApiUrl("[layout.coutner][populate][IconBox]", true, domain)
     );
     return response.data;
   } catch (error: any) {
