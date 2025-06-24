@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+Disallow: /affilate-program
+Disallow: /leads
+Disallow: /*?ref=
+Disallow: /*?__hstc=
+Disallow: /*?__hssc=
+Disallow: /*?__hsfp=
+Disallow:/cart
+Disallow:/checkout
+
+Sitemap: https://www.tapect.com/sitemap/tapect-com-sitemap.xml
+Sitemap: https://www.tapect.in/sitemap/tapect-in-sitemap.xml
+Sitemap: https://www.tapect.au/sitemap/tapect-au-sitemap.xml
+Sitemap: https://www.tapect.de/sitemap/tapect-de-sitemap.xml
+Sitemap: https://www.tapect.ae/sitemap/tapect-ae-sitemap.xml

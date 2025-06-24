@@ -1,0 +1,200 @@
+/* @import "tailwindcss"; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+.flex-container {
+  @apply lg:container px-6 herobannermax:px-0 flex justify-between pt-6 lg:mx-auto items-center;
+}
+.container {
+  @apply px-6 herobannermax:px-0;
+}
+.btn-primary {
+  @apply bg-primary text-white rounded font-primary;
+}
+.btn-secondary {
+  @apply text-md leading-24 px-8 py-4 bg-white rounded text-primary font-primary font-semibold;
+}
+.Nav-active {
+  @apply text-primary;
+}
+
+.dropdown {
+  @apply space-y-4 bg-white  rounded p-6  z-10 min-w-40 hidden shadow-dropdownmenu;
+}
+.NavBar .navlinks {
+  @apply text-md leading-24 font-primary font-normal;
+}
+.NavBar .relative:hover .dropdown-container,
+.NavBar .relative:hover .dropdown {
+  @apply block;
+}
+.dropdown-container {
+  @apply hidden;
+}
+
+.dropdown-item {
+  @apply block px-4 py-2 text-secondary hover:bg-[#F5F8FE] active:bg-[#F5F8FE] rounded-10;
+}
+.BannerTitle {
+  @apply md:text-BannerTitle text-TitleHeading leading-56 font-semibold font-primary md:leading-85 mb-4;
+}
+.Description {
+  @apply text-sm leading-30 font-medium font-secondary;
+}
+.Tab-Description {
+  @apply text-sm leading-30 font-medium font-secondary;
+}
+.HeroBanner {
+  @apply bg-secondary w-full content-center text-white;
+}
+.HeroBanner-light {
+  @apply bg-[#F5F8FE] w-full content-center text-secondary;
+}
+.TitleHeading {
+  @apply md:text-TitleHeading text-[32px] leading-[48px] md:leading-56 font-primary font-semibold;
+}
+.Description-18 {
+  @apply text-md leading-30 font-secondary font-normal;
+}
+.Title-18 {
+  @apply text-md leading-30 font-primary font-medium;
+}
+.Heading-20 {
+  @apply text-lg leading-30 font-primary font-semibold;
+}
+.Featuretitle {
+  @apply text-28 leading-40 font-bold font-primary;
+}
+.Description-dark {
+  @apply text-sm leading-30 font-medium text-secondary font-secondary;
+}
+.Title-60 {
+  @apply md:text-60 text-[32px] leading-56 md:leading-85 font-semibold font-primary;
+}
+.Iconslist:first-child {
+  @apply mt-[119px];
+}
+.Title-24 {
+  @apply text-24 leading-33 font-semibold font-primary;
+}
+.jb-description h2 {
+  @apply Title-24 mb-4;
+}
+.Careerformfield {
+  @apply w-full border border-[#E5E5E5] rounded-16 p-4 mt-1;
+}
+.careerformlabel {
+  @apply text-sm leading-30 font-medium font-primary text-secondary;
+}
+.Title-16 {
+  @apply text-sm leading-30 font-medium font-secondary;
+}
+.Iconslist:after {
+  content: "";
+  width: 23%;
+  height: 2px;
+  position: absolute;
+  border: 1px dashed #fff;
+  transform: rotate(90deg);
+  top: 122%;
+  right: 81.5%;
+}
+.Iconslist:last-child::after {
+  display: none;
+}
+.IconNumber:after {
+  content: "";
+  width: 373px;
+  height: 2px;
+  position: absolute;
+  border-top: 1px dashed #fff;
+  top: 26px;
+  left: 108%;
+}
+.Iconslist-layout2:nth-child(3n) .IconNumber::after {
+  display: none;
+}
+@media (max-width: 1290px) {
+  .IconNumber::after,
+  .Iconslist:after {
+    display: none;
+  }
+}
+.Table-Icon {
+  @apply flex justify-center items-center;
+}
+.list-item-level-1.has-nested-list {
+  list-style: none;
+}
+.list-item-level-1,
+.Legal-data li {
+  list-style: disc;
+  margin-left: 20px;
+  @apply Description text-secondary;
+}
+.list-item-level-2 {
+  margin-left: 20px;
+  @apply Description text-[#757575] mb-6;
+}
+.blog-description p {
+  @apply Description;
+}
+.blog-description h2 {
+  @apply TitleHeading;
+}
+.blog-description a {
+  @apply text-primary;
+}
+.table-container {
+  overflow: scroll;
+}
+
+input:focus-visible, select:focus-visible {
+  outline: none;
+}
+@media (min-width: 1328px) {
+  .dropdown-product-container {
+    width: 1328px;
+    left: -390%;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1328px) {
+  .dropdown-product-container {
+    width: 1024px;
+    left: -250%;
+  }
+}
+
+.animate-shrimmer {
+  animation: shimmer 3s;
+  animation-iteration-count: infinite;
+  background: linear-gradient(to right, #f6f6f6 5%, #fff 25%, #f6f6f6 35%);
+  background-size: 1000px 100%;
+}
+@keyframes shimmer {
+  from {
+    background-position: -1000px 0;
+  }
+  to {
+    background-position: 1000px 0;
+  }
+}
+.css-1xc3v61-indicatorContainer {
+  padding: 4px !important;
+}
+.css-hlgwow {
+  padding: 1px !important;
+}
+.css-1dimb5e-singleValue {
+  margin-left: 5px !important;
+}
+.paypal-buttons{
+  @apply z-0;
+}
+.grecaptcha-badge{
+  @apply hidden;
+}
+}

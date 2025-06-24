@@ -1,0 +1,1 @@
+export const description = (data: any) => data?.[0]?.children?.[0]?.text || "";
