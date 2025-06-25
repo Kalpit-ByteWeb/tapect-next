@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL_ENV = process.env.NEXT__API_URL;
+const API_URL_ENV = process.env.NEXT_PUBLIC_API_URL;
 
 const UsersContact = ({
   onEmailVerified,

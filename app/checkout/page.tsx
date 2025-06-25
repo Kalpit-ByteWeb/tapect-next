@@ -264,7 +264,7 @@ const CheckoutPage = () => {
       };
 
       const response = await axios.post(
-        `${API_URL_ENV}/orders?populate=*`, // Use template literal correctly
+        `${API_URL_ENV}orders?populate=*`,
         orderData,
         {
           headers: {
@@ -308,7 +308,7 @@ const CheckoutPage = () => {
       };
 
       await axios.post(
-        `${API_URL_ENV}/send-order-confirmation-email`,
+        `${API_URL_ENV}send-order-confirmation-email`,
         emailData
       );
     } catch (error) {
@@ -461,27 +461,37 @@ const CheckoutPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (paypalReady && selectedPaymentMethod === "paypal" && window.paypal) {
-      const container = document.getElementById("paypal-button-container");
-      if (!container) return;
+useEffect(() => {
+  if (selectedPaymentMethod !== 'paypal') return;
 
-      container.innerHTML = "";
+  if (!window.paypal && !paypalScriptLoading.current) {
+    loadPayPalScript(
+      setPaypalReady,
+      paypalScriptLoading,
+      getCurrencyCode(cart),
+    );
+    return;
+  }
 
-      const paypalButtons = window.paypal.Buttons({
+  if (paypalReady && window.paypal) {
+    const container = document.getElementById('paypal-button-container');
+    if (!container) return;
+
+    if (container.childElementCount === 0) {
+      const buttons = window.paypal.Buttons({
         style: {
-          layout: "vertical",
-          color: "gold",
-          shape: "pill",
-          label: "paypal",
+          layout: 'vertical',
+          color: 'gold',
+          shape: 'pill',
+          label: 'paypal',
         },
         fundingSource: undefined,
         onClick: async (_: any, actions: any) => {
-          const isAllowed = await handleBeforePayPalClick();
-          return isAllowed ? actions.resolve() : actions.reject();
+          const allowed = await handleBeforePayPalClick();
+          return allowed ? actions.resolve() : actions.reject();
         },
-        createOrder: (_: any, actions: any) => {
-          return actions.order.create({
+        createOrder: (_: any, actions: any) =>
+          actions.order.create({
             purchase_units: [
               {
                 amount: {
@@ -491,30 +501,32 @@ const CheckoutPage = () => {
                 invoice_id: order.OrderId.toString(),
               },
             ],
-          });
-        },
-        onApprove: (_: any, actions: any) => {
-          return actions.order.capture().then(() => {
-            setShowPopup(true);
-            sessionStorage.clear();
-          });
+          }),
+        onApprove: async (_: any, actions: any) => {
+          await actions.order.capture();
+          setShowPopup(true);
+          sessionStorage.clear();
         },
         onError: (err: any) => {
-          console.error("PayPal Error:", err);
-          alert("PayPal payment failed. Please try again.");
+          console.error('PayPal Error:', err);
+          alert('PayPal payment failed. Please try again.');
         },
       });
 
-      if (container.childElementCount === 0) {
-        paypalButtons.render("#paypal-button-container");
-      }
-
+      buttons.render(container);
       return () => {
-        paypalButtons.close && paypalButtons.close();
-        if (container) container.innerHTML = "";
+        buttons.close && buttons.close();
+        container.innerHTML = '';
       };
     }
-  }, [paypalReady, selectedPaymentMethod, cart, discount, isProcessing]);
+  }
+}, [
+  selectedPaymentMethod,
+  paypalReady,
+  cart,
+  total,
+]);
+
 
   if (!cart.length) {
     return (
@@ -588,6 +600,7 @@ const CheckoutPage = () => {
 
                   <div
                     id="paypal-button-container"
+                    data-sdk-integration-source="button-factory"
                     style={{ minHeight: "200px" }}></div>
                 </div>
               )}
