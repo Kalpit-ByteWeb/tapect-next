@@ -9,10 +9,9 @@ import {
   fetchProductShowCase,
 } from '@/components/api/ContentAPI';
 
-export const dynamic = 'force-dynamic'; // guarantees fresh data in dev
+export const dynamic = 'force-dynamic';
 
 export default async function AffilateProgramPage() {
-  /* ─────────────────────── fetch everything in parallel ───────────────────── */
   let error: string | null = null;
 
   let pageData: any = null;
@@ -38,12 +37,10 @@ export default async function AffilateProgramPage() {
       fetchAffilateProgram(),
     ]);
 
-    /* --------------------------- hero banner --------------------------- */
     pageData = pagesResponse.data.find(
       (p: any) => p.PageName === 'Affilate Program',
     );
 
-    /* ----------------------- product-show-case ------------------------ */
     productshowcasedata =
       productShowCaseResponse.data
         .find((p: any) => p.PageName === 'Affilate Program')
@@ -54,7 +51,6 @@ export default async function AffilateProgramPage() {
     productItems =
       productshowcasedata?.flatMap((s: any) => s.IconBox) ?? [];
 
-    /* ---------------------------- features ---------------------------- */
     featureData =
       featuresResponse.data
         .find((p: any) => p.PageName === 'Careers')
@@ -65,7 +61,6 @@ export default async function AffilateProgramPage() {
     featureItems =
       featureData?.flatMap((s: any) => s.FeatureStructure) ?? [];
 
-    /* --------------------- affiliate calculator ---------------------- */
     calculatorData =
       calculatorResponse.data
         .find((p: any) => p.PageName === 'Affilate Program')
@@ -81,11 +76,9 @@ export default async function AffilateProgramPage() {
     error = e.message || 'An error occurred while fetching data.';
   }
 
-  /* ───────────────────────────── errors ────────────────────────────── */
   if (error) return <div>{error}</div>;
   if (!pageData) return <div>No data found.</div>;
 
-  /* ───────────────────────── derive props ──────────────────────────── */
   const heroBanner = pageData.PageSections?.find(
     (s: any) => s.__component === 'layout.hero-banner',
   );
@@ -110,7 +103,6 @@ export default async function AffilateProgramPage() {
     image: p.ProductImage?.url,
   }));
 
-  /* ─────────────────────────── render ─────────────────────────────── */
   return (
     <>
       {heroBanner && (

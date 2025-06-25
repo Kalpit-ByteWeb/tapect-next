@@ -8,11 +8,7 @@ import {
   fetchOurLocation,
 } from '@/components/api/ContentAPI';
 
-/* ---------------------------------------------------------- */
-/*  Server component (SSR) – no hooks / no useEffect          */
-/* ---------------------------------------------------------- */
 export default async function ContactUsPage() {
-  /* ---------- fetch everything in parallel ---------- */
   let pageData: any = null;
   let featureItems: any[] = [];
   let locationSections: any[] = [];
@@ -28,16 +24,13 @@ export default async function ContactUsPage() {
     const getPage = (res: any) =>
       res.data.find((p: any) => p.PageName === 'Contact');
 
-    /* page data ---------------------------------------------------- */
     pageData = getPage(pagesRes);
 
-    /* feature cards (contact info) --------------------------------- */
     featureItems =
       getPage(featuresRes)
         ?.PageSections?.filter((s: any) => s.__component === 'layout.features')
         ?.flatMap((s: any) => s.FeatureStructure || []) || [];
 
-    /* locations ---------------------------------------------------- */
     locationSections =
       getPage(locationsRes)?.PageSections?.filter(
         (s: any) => s.__component === 'layout.our-location',
@@ -46,11 +39,9 @@ export default async function ContactUsPage() {
     error = e.message || 'An error occurred while fetching content.';
   }
 
-  /* ---------- error handling ---------- */
   if (error) return <div>{error}</div>;
   if (!pageData) return <div>No data found.</div>;
 
-  /* ---------- derive props for child components ---------- */
   const hero = pageData.PageSections?.find(
     (s: any) => s.__component === 'layout.hero-banner',
   );
@@ -77,7 +68,6 @@ export default async function ContactUsPage() {
       })) || [],
   );
 
-  /* ---------- render ---------- */
   return (
     <>
       {hero && (

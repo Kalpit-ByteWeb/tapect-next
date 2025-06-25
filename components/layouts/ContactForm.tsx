@@ -35,10 +35,8 @@ interface Props {
 }
 
 const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
-  /* ─────────────────────────── constants ─────────────────────────── */
   const defaultCountryCode = 'IN';
 
-  /* ─────────────────────────── state ─────────────────────────────── */
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -63,7 +61,6 @@ const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
   const [countryDialingCode, setCountryDialingCode] = useState('+91');
   const [countryOptions, setCountryOptions] = useState<any[]>([]);
 
-  /* ─────────────────────── custom select styles ──────────────────── */
   const customStyles = {
     control: (base: any) => ({
       ...base,
@@ -90,7 +87,6 @@ const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
     }),
   };
 
-  /* ───────────────────────── country detection ───────────────────── */
   useEffect(() => {
     const init = async () => {
       const userCountry = await getUserCountry();
@@ -118,7 +114,6 @@ const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
     init();
   }, []);
 
-  /* ───────────────────────── form helpers ────────────────────────── */
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -138,7 +133,6 @@ const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
     }
   };
 
-  /* ───────────────────────── form submit ─────────────────────────── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmissionError(null);
@@ -193,7 +187,6 @@ const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
       });
 
       if (res.ok) {
-        /* ignore possible non-JSON body */
         try {
           await res.json();
         } catch {}
@@ -221,7 +214,6 @@ const ContactForm: React.FC<Props> = ({ ContactInfo }) => {
     }
   };
 
-  /* ───────────────────────────── UI ──────────────────────────────── */
   return (
     <section className="px-0 py-0 mt-12 ">
       <div className="container flex flex-col justify-center gap-y-12 relative mx-auto lg:gap-x-[90px] xl:gap-x-[110px]  pb-60 border-[#E5E5E5]">
