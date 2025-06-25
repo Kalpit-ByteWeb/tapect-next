@@ -21,7 +21,7 @@ function TabSection({ tabs }: TabSectionProps) {
 
   return (
     <div className="md:px-6">
-      <div className="flex-container mx-0 w-auto bg-[#F5F8FE] border-[#E2E5EF] shadow-tabsection rounded-20 mt-60 md:mt-120 mb-60 p-6 lg:p-20 flex flex-col md:flex-row gap-6 lg:gap-[52px]">
+      <div className="flex-container w-auto bg-[#F5F8FE] border-[#E2E5EF] shadow-tabsection rounded-20 mt-60 md:mt-120 mb-60 p-6 lg:p-20 flex flex-col md:flex-row gap-6 lg:gap-[52px]">
         {/* Tabs Section */}
         <div className="w-full md:w-[40%] lg:w-[45%]">
           <ul className="space-y-4 sm:space-y-6">
