@@ -63,8 +63,16 @@ export const calculateShippingCost = (domain: string): number =>
 export const getCountryByDomain = (domain: string): string =>
   DOMAIN_CONFIG[domain]?.country ?? DOMAIN_CONFIG[DEFAULT_DOMAIN].country;
 
-export const getLeadSourceByDomain = (domain: string): string =>
-  DOMAIN_CONFIG[domain]?.leadSource ?? DOMAIN_CONFIG[DEFAULT_DOMAIN].leadSource;
+export const getLeadSourceByDomain = (domain?: string): string => {
+  const currentDomain =
+    domain || (typeof window !== "undefined" ? window.location.hostname : "");
+
+  return (
+    DOMAIN_CONFIG[currentDomain]?.leadSource ??
+    DOMAIN_CONFIG[DEFAULT_DOMAIN].leadSource
+  );
+};
+
 
 export const getTrackingIdByDomain = (domain: string): string =>
   DOMAIN_CONFIG[domain]?.gaTrackingId ?? DOMAIN_CONFIG[DEFAULT_DOMAIN].gaTrackingId;
