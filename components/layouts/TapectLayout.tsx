@@ -1,4 +1,5 @@
-import Link from "next/link";import { Image } from "../../libs/Index";
+import Link from "next/link";
+import { Image } from "../../libs/Index";
 
 interface AboutTapectType {
   ImageUrl: string;
