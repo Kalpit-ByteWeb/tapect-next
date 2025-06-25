@@ -62,10 +62,10 @@ export const fetchProductShowCase = async (domain?: string): Promise<ApiResponse
 };
 
 
-export const fetchTab = async (): Promise<ApiResponse> => {
+export const fetchTab = async (domain?: string): Promise<ApiResponse> => {
   try {
     const response = await axios.get(
-      buildApiUrl("[layout.tab][populate][Tab]")
+      buildApiUrl("[layout.tab][populate][Tab]", true, domain)
     );
     return response.data;
   } catch (error: any) {
@@ -86,10 +86,10 @@ export const fetchCentraliedSection = async (domain?: string): Promise<ApiRespon
   }
 };
 
-export const fetchIconList = async (): Promise<ApiResponse> => {
+export const fetchIconList = async (domain?: string): Promise<ApiResponse> => {
   try {
     const response = await axios.get(
-      buildApiUrl("[layout.centralised-management][populate][IconList]")
+      buildApiUrl("[layout.centralised-management][populate][IconList]", true, domain)
     );
     return response.data;
   } catch (error: any) {
