@@ -7,6 +7,47 @@ import ShimmerCartPage from "@/components/layouts/Shimmar/ShimmerHomePage";
 import { fetchCounter, fetchCounterIconBox, fetchFeatures, fetchPages } from "@/components/api/ContentAPI";
 import { description } from "@/libs/Assets/helper";
 import { getDomain } from "@/libs/Assets/DomainWiseData";
+import { Metadata } from "next";
+import { getSEOData } from "@/libs/Assets/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pathname = "/about-us";
+  const seoData = await getSEOData(pathname);
+
+  if (!seoData) {
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
+  }
+
+  return {
+    title: seoData.metaTitle,
+    description: seoData.metaDescription,
+    robots: seoData.metaRobots,
+     alternates: {
+    canonical: seoData.canonicalURL,
+     },
+    openGraph: {
+      title: seoData.openGraph?.ogTitle || seoData.metaTitle,
+      description: seoData.openGraph?.ogDescription || seoData.metaDescription,
+      url: seoData.openGraph?.ogUrl || "",
+      siteName: seoData.openGraph?.ogSiteName || "",
+      images: seoData.openGraph?.ogImage?.url ? [seoData.openGraph.ogImage.url] : [],
+      locale: seoData.openGraph?.ogLocale,
+      type: seoData.openGraph?.ogType as any,
+    },
+    twitter: {
+      card: seoData.twitter?.twitterCard as any,
+      title: seoData.twitter?.twitterTitle || seoData.metaTitle,
+      description: seoData.twitter?.twitterDescription || seoData.metaDescription,
+      site: seoData.twitter?.twitterSite || "",
+      creator: seoData.twitter?.twitterCreator || "",
+      images: seoData.twitter?.twitterImage?.url ? [seoData.twitter.twitterImage.url] : [],
+    },
+    other: seoData.extraMeta || {},
+  };
+}
 
 export default async function AboutPage() {
   const host = (await headers()).get("host") ?? "tapect.com";
