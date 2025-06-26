@@ -12,10 +12,7 @@ import ShimmerCartPage from "@/components/layouts/Shimmar/ShimmerHomePage";
 import StructuredData from "@/components/seo/StructuredData";
 import OrderingExperience from "@/components/layouts/OrderingExperience";
 
-import {
-  fetchProducts,
-  StrapiProduct,
-} from "@/components/api/ProductsAPI";
+import { fetchProducts, StrapiProduct } from "@/components/api/ProductsAPI";
 import {
   fetchCentraliedSection,
   fetchFeatures,
@@ -33,7 +30,7 @@ export default async function FeaturesPage() {
   const host = (await headers()).get("host") ?? "tapect.com";
   const domain = getDomain(host);
   const pathname = "/features";
-    const seoData = await getSEOData(pathname);
+  const seoData = await getSEOData(pathname);
   try {
     const [
       productsRes,
@@ -93,7 +90,9 @@ export default async function FeaturesPage() {
         (s: any) => s.__component === "layout.product-show-case"
       ) || [];
 
-    const iconBoxes = productShowcaseSections.flatMap((s: any) => s.IconBox || []);
+    const iconBoxes = productShowcaseSections.flatMap(
+      (s: any) => s.IconBox || []
+    );
 
     const centralisedData =
       getPage(centralRes)?.PageSections?.filter(
@@ -101,9 +100,11 @@ export default async function FeaturesPage() {
       ) || [];
 
     const iconListData =
-      getPage(iconRes)?.PageSections?.filter(
-        (s: any) => s.__component === "layout.centralised-management"
-      )?.flatMap((s: any) => s.IconList || []) || [];
+      getPage(iconRes)
+        ?.PageSections?.filter(
+          (s: any) => s.__component === "layout.centralised-management"
+        )
+        ?.flatMap((s: any) => s.IconList || []) || [];
 
     const hero = pageData?.PageSections?.find(
       (s: any) => s.__component === "layout.hero-banner"
