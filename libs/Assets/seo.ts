@@ -60,13 +60,9 @@ export async function getSEOData(pagePath: string, hostname?: string): Promise<S
       }
     }
 
-    console.log("SEO API Params:", params);
-    console.log("Fetching SEO for path:", pagePath);
 
     const response = await axios.get(`${API_URL_ENV}seos`, { params });
     const data = response.data.data;
-
-    console.log("SEO API Response:", data);
 
     if (Array.isArray(data) && data.length > 0) {
       const seo = data[0].seo;
