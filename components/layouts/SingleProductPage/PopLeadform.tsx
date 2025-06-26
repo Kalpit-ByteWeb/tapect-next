@@ -11,7 +11,7 @@ interface ModalProps {
   show: boolean;
   onClose: () => void;
   quantity: number;
-  domain: string;
+  domain?: string;
 }
 
 interface FormData {
@@ -28,7 +28,7 @@ interface FormData {
   leadstatus?: string;
 }
 
-const PopLeadform: React.FC<ModalProps> = ({ show, onClose, quantity, domain }) => {
+const PopLeadform: React.FC<ModalProps> = ({ show, onClose, quantity, domain='/' }) => {
   const [formData, setFormData] = useState<FormData>({
     FirstName: "",
     LastName: "",

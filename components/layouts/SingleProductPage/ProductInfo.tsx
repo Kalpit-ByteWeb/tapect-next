@@ -7,7 +7,7 @@ import { Button } from "@/libs/Index";
 import Accordion from "@/libs/Assets/Accordion";
 import Link from "next/link";
 
-// import PopLeadform from "./PopLeadform";
+import PopLeadform from "./PopLeadform";
 
 interface ProductInfoProps {
   slideImages: string[];
@@ -116,11 +116,11 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
   return (
     <>
-      {/* <PopLeadform
+      <PopLeadform
         show={showPopup}
         onClose={() => setShowPopup(false)}
         quantity={quantity}
-      /> */}
+      />
       <section className="lg:py-120 md:py-60 pt-5">
         <div className="flex container lg:flex-row flex-col lg:mx-auto md:px-6 herobannermax:px-0 mx-auto lg:gap-6 gap-12 relative">
           <div className="lg:w-3/5 w-full md:px-0 ">
