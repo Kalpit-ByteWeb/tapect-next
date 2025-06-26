@@ -10,6 +10,48 @@ import {
 import ShimmerSingleProduct from "@/components/layouts/Shimmar/ShimmerSingleProduct";
 import SingleProductSchema from "@/components/seo/SingleProductSchema";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { getSEOData } from "@/libs/Assets/seo";
+
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pathname = "/product";
+  const seoData = await getSEOData(pathname);
+
+  if (!seoData) {
+    return {
+      title: "Default Title",
+      description: "Default Description",
+    };
+  }
+
+  return {
+    title: seoData.metaTitle,
+    description: seoData.metaDescription,
+    robots: seoData.metaRobots,
+     alternates: {
+    canonical: seoData.canonicalURL,
+     },
+    openGraph: {
+      title: seoData.openGraph?.ogTitle || seoData.metaTitle,
+      description: seoData.openGraph?.ogDescription || seoData.metaDescription,
+      url: seoData.openGraph?.ogUrl || "",
+      siteName: seoData.openGraph?.ogSiteName || "",
+      images: seoData.openGraph?.ogImage?.url ? [seoData.openGraph.ogImage.url] : [],
+      locale: seoData.openGraph?.ogLocale,
+      type: seoData.openGraph?.ogType as any,
+    },
+    twitter: {
+      card: seoData.twitter?.twitterCard as any,
+      title: seoData.twitter?.twitterTitle || seoData.metaTitle,
+      description: seoData.twitter?.twitterDescription || seoData.metaDescription,
+      site: seoData.twitter?.twitterSite || "",
+      creator: seoData.twitter?.twitterCreator || "",
+      images: seoData.twitter?.twitterImage?.url ? [seoData.twitter.twitterImage.url] : [],
+    },
+    other: seoData.extraMeta || {},
+  };
+}
 
 export default async function SingleProductPage(props: {
   params: { id: string };
