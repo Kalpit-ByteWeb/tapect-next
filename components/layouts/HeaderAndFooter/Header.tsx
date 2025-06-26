@@ -142,7 +142,7 @@ const Header = () => {
 
   return (
     <header className="bg-white sticky top-0 z-50 border-none shadow-md">
-      <div className="container mx-auto py-4 px-6">
+      <div className="container mx-auto py-4 px-6 lg:px-0">
         <div className="flex items-center justify-between">
           {HeaderDatas?.Logo?.url && (
             <div className="Logo">

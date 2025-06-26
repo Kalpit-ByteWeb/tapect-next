@@ -16,7 +16,7 @@ const Accordion: React.FC<AccordionItemProps> = ({
   return (
     <div
       className={`border-b border-[#E5E5E5]  last:border-b-0 ${
-        layout == "WithIcon" ? "pb-2" : "pb-6"
+        layout == "WithIcon" ? "pb-2" : "py-6"
       }`}>
       <button
         className="flex items-center justify-between w-full text-left"

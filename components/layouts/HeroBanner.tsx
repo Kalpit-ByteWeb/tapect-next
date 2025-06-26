@@ -47,7 +47,7 @@ const HeroBanner: React.FC<BannerData> = ({
   const hasImageNoUrl = BannerImageUrl === "#";
 
   const containerClasses = BannerFullWidth
-    ? `flex-container herobannermax:flex-row flex-col w-full text-center herobannermax:text-left ${BannerHeight} relative py-10 herobannermax:py-0`
+    ? `lg:container px-6 herobannermax:px-0 flex justify-between pt-6 lg:mx-auto items-center herobannermax:flex-row flex-col w-full text-center herobannermax:text-left ${BannerHeight} relative py-10 herobannermax:py-0`
     : "landscapemax:w-[1059px] mx-auto w-full flex flex-col items-center justify-center h-full px-6 landscapemax:px-0";
 
   const contentClasses = hasImage

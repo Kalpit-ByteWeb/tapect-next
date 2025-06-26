@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 export default async function SingleProductPage(props: {
   params: { id: string };
 }) {
-  const { id } = props.params;
+  const { id } = await props.params;
 
   try {
     const [product, productsResponse] = await Promise.all([

@@ -2,19 +2,21 @@ import Link from 'next/link';
 
 import BlogPageLayout from '@/components/layouts/Blog/BlogPageLayout';
 import BlogList from '@/components/layouts/Blog/BlogList';
-import {
-  getArticles,               
-} from '@/components/api/BlogApi';
+import { getArticles } from '@/components/api/BlogApi';
 
-export const dynamic = 'force-dynamic'; 
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
-  searchParams: { page?: string };
+  searchParams: { page?: string } | Promise<{ page?: string }>;
 }
 
 export default async function BlogPage({ searchParams }: PageProps) {
+  const params = await searchParams;
   const postsPerPage = 7;
-  const currentPage = Math.max(1, parseInt((searchParams.page) || '1', 10));
+  const currentPage = Math.max(
+    1,
+    parseInt(params?.page ?? '1', 10)
+  );
 
   let latestPost: any | null = null;
   let articles: any[] = [];
@@ -48,13 +50,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
               const page = i + 1;
               const isActive = page === currentPage;
               return (
-                <Link
+                  <Link
                   key={page}
                   href={`/blog?page=${page}`}
-                  className={`px-4 py-2 rounded-8 border ${
+                  className={`px-4 py-2 rounded-10 border ${
                     isActive
                       ? 'bg-primary text-white'
-                      : 'bg-white text-primary hover:bg-gray-100'
+                      : 'bg-[#652DBF0F] text-black hover:bg-gray-100'
                   }`}
                 >
                   {page}
