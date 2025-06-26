@@ -405,7 +405,7 @@ const CheckoutPage = () => {
         };
 
         const { data: session } = await axios.post(
-          `${API_URL_ENV}/create-stripe-session`,
+          `${API_URL_ENV}create-stripe-session`,
           sessionData,
           {
             headers: {
