@@ -1,19 +1,23 @@
 // app/careers/[route]/page.tsx
 import { notFound } from 'next/navigation';
-import { getJobOpeningByRoute } from '@/components/api/frappeService';
+import { getJobOpeningByRoute as fetchJob } from '@/components/api/frappeService';
 import JobOpeningDetails from '@/components/layouts/Jobs/JobOpeningDetails';
-import type { JobOpening } from '@/components/layouts/Jobs/JobOpening'; 
+import type { JobOpening } from '@/components/layouts/Jobs/JobOpening';
+import { unstable_cache } from 'next/cache';
 
-export default async function Page(
-  props: { params: { route: string } },
-) {
-  await Promise.resolve();
+export const revalidate = 60;
 
-  const { route } = await props.params;
+const getJobOpeningByRoute = unstable_cache(
+  fetchJob,
+  (route) => ['job-opening', route],
+  { revalidate }
+);
+
+export default async function Page({ params }: { params: { route: string } }) {
+  const { route } = params;
   if (!route) notFound();
 
   let job: JobOpening | null = null;
-  let error: string | null = null;
 
   try {
     const frappeJob = await getJobOpeningByRoute(route);
@@ -33,11 +37,9 @@ export default async function Page(
       skillsQualifications: frappeJob.skillsQualifications,
       whatWeOffer: frappeJob.whatWeOffer,
     };
-  } catch (e: any) {
-    error = e.message;
+  } catch {
+    notFound();
   }
 
-  if (!job) notFound();
-
-  return <JobOpeningDetails job={job}/>;
+  return <JobOpeningDetails job={job} />;
 }
