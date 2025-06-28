@@ -49,10 +49,14 @@ const DOMAIN_CONFIG: Record<string, DomainConfig> = {
 const DEFAULT_DOMAIN = "tapect.com";
 
 // ✅ Now supports server-side rendering
-export const getDomain = (hostname?: string): string => {
-  const domain = hostname?.replace("www.", "").toLowerCase() ?? DEFAULT_DOMAIN;
-  return DOMAIN_CONFIG[domain] ? domain : DEFAULT_DOMAIN;
-};
+export function getDomain(rawHost?: string): string {
+  const host =
+    rawHost ||
+    (typeof window !== "undefined" ? window.location.hostname : undefined) ||
+    DEFAULT_DOMAIN;
+  const key = host.replace(/^www\./, "").split(":")[0].toLowerCase();
+  return DOMAIN_CONFIG[key] ? key : DEFAULT_DOMAIN;
+}
 
 export const getLocaleByDomain = (domain: string): string | null =>
   DOMAIN_CONFIG[domain]?.locale ?? DOMAIN_CONFIG[DEFAULT_DOMAIN].locale;
