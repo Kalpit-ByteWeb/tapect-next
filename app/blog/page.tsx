@@ -1,13 +1,15 @@
 import Link from 'next/link';
-
 import BlogPageLayout from '@/components/layouts/Blog/BlogPageLayout';
 import BlogList from '@/components/layouts/Blog/BlogList';
-import { getArticles } from '@/components/api/BlogApi';
-
-export const dynamic = 'force-dynamic';
-
-import { getSEOData } from "@/libs/Assets/seo";
+import { getArticles as fetchArticles } from '@/components/api/BlogApi';
+import { getSEOData as fetchSEO } from "@/libs/Assets/seo";
 import { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
+
+export const revalidate = 60;
+
+const getArticles = unstable_cache(fetchArticles, ['blog-articles'], { revalidate: 60 });
+const getSEOData = unstable_cache(fetchSEO, ['blog-seo'], { revalidate: 60 });
 
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/blog";
@@ -24,9 +26,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoData.metaTitle,
     description: seoData.metaDescription,
     robots: seoData.metaRobots,
-     alternates: {
-    canonical: seoData.canonicalURL,
-     },
+    alternates: {
+      canonical: seoData.canonicalURL,
+    },
     openGraph: {
       title: seoData.openGraph?.ogTitle || seoData.metaTitle,
       description: seoData.openGraph?.ogDescription || seoData.metaDescription,
@@ -55,10 +57,7 @@ interface PageProps {
 export default async function BlogPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const postsPerPage = 7;
-  const currentPage = Math.max(
-    1,
-    parseInt(params?.page ?? '1', 10)
-  );
+  const currentPage = Math.max(1, parseInt(params?.page ?? '1', 10));
 
   let latestPost: any | null = null;
   let articles: any[] = [];
@@ -70,8 +69,8 @@ export default async function BlogPage({ searchParams }: PageProps) {
     latestPost = latest?.articles?.[0] ?? null;
 
     const data = await getArticles(currentPage, postsPerPage);
-    articles   = data?.articles ?? [];
-    totalPosts = data?.total    ?? 0;
+    articles = data?.articles ?? [];
+    totalPosts = data?.total ?? 0;
   } catch (e: any) {
     error = e.message || 'Failed to load articles.';
   }
@@ -81,33 +80,30 @@ export default async function BlogPage({ searchParams }: PageProps) {
   const totalPages = Math.ceil(totalPosts / postsPerPage);
 
   return (
-    <>
+    <BlogPageLayout>
+      <BlogList latestPost={latestPost} posts={articles} />
 
-      <BlogPageLayout>
-        <BlogList latestPost={latestPost} posts={articles} />
-
-        {totalPages > 1 && (
-          <nav className="flex gap-2 mt-8">
-            {Array.from({ length: totalPages }, (_, i) => {
-              const page = i + 1;
-              const isActive = page === currentPage;
-              return (
-                  <Link
-                  key={page}
-                  href={`/blog?page=${page}`}
-                  className={`px-4 py-2 rounded-10 border ${
-                    isActive
-                      ? 'bg-primary text-white'
-                      : 'bg-[#652DBF0F] text-black hover:bg-gray-100'
-                  }`}
-                >
-                  {page}
-                </Link>
-              );
-            })}
-          </nav>
-        )}
-      </BlogPageLayout>
-    </>
+      {totalPages > 1 && (
+        <nav className="flex gap-2 mt-8">
+          {Array.from({ length: totalPages }, (_, i) => {
+            const page = i + 1;
+            const isActive = page === currentPage;
+            return (
+              <Link
+                key={page}
+                href={`/blog?page=${page}`}
+                className={`px-4 py-2 rounded-10 border ${
+                  isActive
+                    ? 'bg-primary text-white'
+                    : 'bg-[#652DBF0F] text-black hover:bg-gray-100'
+                }`}
+              >
+                {page}
+              </Link>
+            );
+          })}
+        </nav>
+      )}
+    </BlogPageLayout>
   );
 }

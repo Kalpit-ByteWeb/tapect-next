@@ -1,5 +1,3 @@
-// app/features/page.tsx
-
 import HeroBanner from "@/components/layouts/HeroBanner";
 import TabSection from "@/components/layouts/TabSection";
 import TapectLayout from "@/components/layouts/TapectLayout";
@@ -27,6 +25,8 @@ import { getDomain } from "@/libs/Assets/DomainWiseData";
 import { getSEOData } from "@/libs/Assets/seo";
 import { Metadata } from "next";
 
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/features";
   const seoData = await getSEOData(pathname);
@@ -42,9 +42,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoData.metaTitle,
     description: seoData.metaDescription,
     robots: seoData.metaRobots,
-     alternates: {
-    canonical: seoData.canonicalURL,
-     },
+    alternates: {
+      canonical: seoData.canonicalURL,
+    },
     openGraph: {
       title: seoData.openGraph?.ogTitle || seoData.metaTitle,
       description: seoData.openGraph?.ogDescription || seoData.metaDescription,
@@ -70,7 +70,7 @@ export default async function FeaturesPage() {
   const host = (await headers()).get("host") ?? "tapect.com";
   const domain = getDomain(host);
   const pathname = "/features";
-  const seoData = await getSEOData(pathname);
+
   try {
     const [
       productsRes,
@@ -96,12 +96,10 @@ export default async function FeaturesPage() {
       "Tapect Metal Card",
     ];
 
-    const selectedProducts: StrapiProduct[] = productsRes.data
-      .filter((product: any) =>
-        wantedProductNames.includes(product.ProductName)
-      )
+    const selectedProducts = productsRes.data
+      .filter((p: StrapiProduct) => wantedProductNames.includes(p.ProductName))
       .sort(
-        (a: any, b: any) =>
+        (a, b) =>
           wantedProductNames.indexOf(a.ProductName) -
           wantedProductNames.indexOf(b.ProductName)
       );
@@ -110,48 +108,38 @@ export default async function FeaturesPage() {
       res.data.find((p: any) => p.PageName === "Features");
 
     const pageData = getPage(pagesRes);
-    const features =
-      getPage(featuresRes)
-        ?.PageSections?.filter((s: any) => s.__component === "layout.features")
-        ?.flatMap((s: any) => s.FeatureStructure || []) || [];
-
-    const featuresResData =
-      getPage(featuresRes)?.PageSections?.filter(
-        (s: any) => s.__component === "layout.features"
-      ) || [];
-
-    const tabs =
-      getPage(tabsRes)?.PageSections?.find(
-        (s: any) => s.__component === "layout.tab"
-      )?.Tab || [];
-
-    const productShowcaseSections =
-      getPage(showcaseRes)?.PageSections?.filter(
-        (s: any) => s.__component === "layout.product-show-case"
-      ) || [];
-
-    const iconBoxes = productShowcaseSections.flatMap(
-      (s: any) => s.IconBox || []
-    );
-
-    const centralisedData =
-      getPage(centralRes)?.PageSections?.filter(
-        (s: any) => s.__component === "layout.centralised-management"
-      ) || [];
-
-    const iconListData =
-      getPage(iconRes)
-        ?.PageSections?.filter(
-          (s: any) => s.__component === "layout.centralised-management"
-        )
-        ?.flatMap((s: any) => s.IconList || []) || [];
-
     const hero = pageData?.PageSections?.find(
       (s: any) => s.__component === "layout.hero-banner"
     );
     const faq = pageData?.PageSections?.find(
       (s: any) => s.__component === "layout.faq"
     );
+
+    const featuresPageSections = getPage(featuresRes)?.PageSections || [];
+    const featureComponents = featuresPageSections.filter(
+      (s: any) => s.__component === "layout.features"
+    );
+    const features = featureComponents.flatMap((s: any) => s.FeatureStructure || []);
+
+    const tabs = getPage(tabsRes)?.PageSections?.find(
+      (s: any) => s.__component === "layout.tab"
+    )?.Tab || [];
+
+    const productShowcaseSections = getPage(showcaseRes)?.PageSections?.filter(
+      (s: any) => s.__component === "layout.product-show-case"
+    ) || [];
+
+    const iconBoxes = productShowcaseSections.flatMap((s: any) => s.IconBox || []);
+
+    const centralisedData = getPage(centralRes)?.PageSections?.filter(
+      (s: any) => s.__component === "layout.centralised-management"
+    ) || [];
+
+    const iconListData = getPage(iconRes)?.PageSections?.filter(
+      (s: any) => s.__component === "layout.centralised-management"
+    )?.flatMap((s: any) => s.IconList || []) || [];
+
+    const seoData = await getSEOData(pathname);
 
     return (
       <>
@@ -170,7 +158,7 @@ export default async function FeaturesPage() {
             ButtonIcon="/Icons/ButtonIcon.svg"
             BannerImageUrl={hero.BannerImage?.url}
             BannerImageAlt={hero.Title}
-            BannerFullWidth={true}
+            BannerFullWidth
           />
         )}
 
@@ -204,18 +192,18 @@ export default async function FeaturesPage() {
             Title={productShowcaseSections[0].Title}
             TitleHighlight={productShowcaseSections[0].TitleHighlight}
             Description={description(productShowcaseSections[0].Description)}
-            Productdatas={selectedProducts.slice(0, 3)}
+            Productdatas={selectedProducts}
             ViewProductBtnUrl={productShowcaseSections[0].ButtonUrl}
             ViewProductBtnLabel={productShowcaseSections[0].ButtonText}
             ViewProductBtnIconUrl="/Icons/ButtonIcon.svg"
           />
         )}
 
-        {features.length > 5 && (
+        {features.length > 5 && featureComponents[1] && (
           <AdvanceFeatures
-            Title={featuresResData[1]?.Title}
-            TitleHighlight={featuresResData[1]?.TitleHighlight}
-            Description={description(featuresResData[1]?.Description)}
+            Title={featureComponents[1]?.Title}
+            TitleHighlight={featureComponents[1]?.TitleHighlight}
+            Description={description(featureComponents[1]?.Description)}
             featuredata={features.slice(2, 5).map((item: any) => ({
               FeatureTitle: item.FeatureTitle,
               FeatureDescription: description(item.FeatureDescription),

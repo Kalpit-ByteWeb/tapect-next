@@ -1,14 +1,24 @@
 import { headers } from "next/headers";
-import Countersection from "@/components/layouts/AboutUs/Countersection";
-import CurrenctOpeningCTA from "@/components/layouts/AboutUs/CurrenctOpeningCTA";
+import { Metadata } from "next";
+import { unstable_cache } from "next/cache";
+
 import HeroBanner from "@/components/layouts/HeroBanner";
 import TapectLayout from "@/components/layouts/TapectLayout";
+import Countersection from "@/components/layouts/AboutUs/Countersection";
+import CurrenctOpeningCTA from "@/components/layouts/AboutUs/CurrenctOpeningCTA";
 import ShimmerCartPage from "@/components/layouts/Shimmar/ShimmerHomePage";
+
 import { fetchCounter, fetchCounterIconBox, fetchFeatures, fetchPages } from "@/components/api/ContentAPI";
-import { description } from "@/libs/Assets/helper";
-import { getDomain } from "@/libs/Assets/DomainWiseData";
-import { Metadata } from "next";
 import { getSEOData } from "@/libs/Assets/seo";
+import { getDomain } from "@/libs/Assets/DomainWiseData";
+import { description } from "@/libs/Assets/helper";
+
+export const revalidate = 60;
+
+const getPages = unstable_cache(fetchPages, ["about-pages"], { revalidate: 60 });
+const getFeatures = unstable_cache(fetchFeatures, ["about-features"], { revalidate: 60 });
+const getCounter = unstable_cache(fetchCounter, ["about-counter"], { revalidate: 60 });
+const getCounterIcons = unstable_cache(fetchCounterIconBox, ["about-counter-icons"], { revalidate: 60 });
 
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/about-us";
@@ -25,9 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoData.metaTitle,
     description: seoData.metaDescription,
     robots: seoData.metaRobots,
-     alternates: {
-    canonical: seoData.canonicalURL,
-     },
+    alternates: {
+      canonical: seoData.canonicalURL,
+    },
     openGraph: {
       title: seoData.openGraph?.ogTitle || seoData.metaTitle,
       description: seoData.openGraph?.ogDescription || seoData.metaDescription,
@@ -55,10 +65,10 @@ export default async function AboutPage() {
 
   try {
     const [pagesRes, featuresRes, counterRes, counterIconRes] = await Promise.all([
-      fetchPages(domain),
-      fetchFeatures(domain),
-      fetchCounter(domain),
-      fetchCounterIconBox(domain),
+      getPages(domain),
+      getFeatures(domain),
+      getCounter(domain),
+      getCounterIcons(domain),
     ]);
 
     const getPage = (res: any) => res.data.find((p: any) => p.PageName === "About Us");

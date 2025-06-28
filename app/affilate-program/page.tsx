@@ -10,6 +10,14 @@ import {
 } from '@/components/api/ContentAPI';
 import { getSEOData } from "@/libs/Assets/seo";
 import { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
+
+export const revalidate = 60;
+
+const getPages = unstable_cache(fetchPages, ['affilate-pages'], { revalidate: 60 });
+const getShowcase = unstable_cache(fetchProductShowCase, ['affilate-showcase'], { revalidate: 60 });
+const getFeatures = unstable_cache(fetchFeatures, ['affilate-features'], { revalidate: 60 });
+const getAffiliateProgram = unstable_cache(fetchAffilateProgram, ['affilate-calculator'], { revalidate: 60 });
 
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/affilate-program";
@@ -26,9 +34,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoData.metaTitle,
     description: seoData.metaDescription,
     robots: seoData.metaRobots,
-     alternates: {
-    canonical: seoData.canonicalURL,
-     },
+    alternates: {
+      canonical: seoData.canonicalURL,
+    },
     openGraph: {
       title: seoData.openGraph?.ogTitle || seoData.metaTitle,
       description: seoData.openGraph?.ogDescription || seoData.metaDescription,
@@ -50,8 +58,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const dynamic = 'force-dynamic';
-
 export default async function AffilateProgramPage() {
   let error: string | null = null;
 
@@ -72,10 +78,10 @@ export default async function AffilateProgramPage() {
       featuresResponse,
       calculatorResponse,
     ] = await Promise.all([
-      fetchPages(),
-      fetchProductShowCase(),
-      fetchFeatures(),
-      fetchAffilateProgram(),
+      getPages(),
+      getShowcase(),
+      getFeatures(),
+      getAffiliateProgram(),
     ]);
 
     pageData = pagesResponse.data.find(

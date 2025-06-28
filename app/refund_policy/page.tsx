@@ -3,6 +3,7 @@ import HeroBanner from "../../components/layouts/HeroBanner";
 import StructuredData from "../../components/seo/StructuredData";
 import { Metadata } from "next";
 
+export const revalidate = 60;
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/refund_policy";
   const seoData = await getSEOData(pathname);

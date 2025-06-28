@@ -13,7 +13,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getSEOData } from "@/libs/Assets/seo";
 
-
+export const revalidate = 60;
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/product";
   const seoData = await getSEOData(pathname);

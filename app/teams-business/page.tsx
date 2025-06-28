@@ -7,6 +7,7 @@ import FAQSection from "@/components/layouts/FAQSection";
 import ShimmerCartPage from "@/components/layouts/Shimmar/ShimmerHomePage";
 import StructuredData from "@/components/seo/StructuredData";
 
+export const revalidate = 60;
 import {
   fetchPages,
   fetchTab,

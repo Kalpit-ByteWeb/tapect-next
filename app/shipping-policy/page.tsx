@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import HeroBanner from "../../components/layouts/HeroBanner";
 import { getSEOData } from "@/libs/Assets/seo";
 
+export const revalidate = 60;
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/shipping-policy";
   const seoData = await getSEOData(pathname);

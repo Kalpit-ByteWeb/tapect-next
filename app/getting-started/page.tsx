@@ -1,7 +1,9 @@
-import StructuredData from '@/components/seo/StructuredData'
+import StructuredData from '@/components/seo/StructuredData';
 import { getSEOData } from '@/libs/Assets/seo';
-import { Image } from '@/libs/Index'
+import { Image } from '@/libs/Index';
 import { Metadata } from 'next';
+
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/getting-started";
@@ -18,9 +20,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoData.metaTitle,
     description: seoData.metaDescription,
     robots: seoData.metaRobots,
-     alternates: {
-    canonical: seoData.canonicalURL,
-     },
+    alternates: {
+      canonical: seoData.canonicalURL,
+    },
     openGraph: {
       title: seoData.openGraph?.ogTitle || seoData.metaTitle,
       description: seoData.openGraph?.ogDescription || seoData.metaDescription,
@@ -42,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const Howtousdata = [
+const HowToUseSteps = [
   {
     step: 'Step 1',
     title: 'Register in the Tapect Console',
@@ -71,11 +73,12 @@ const Howtousdata = [
       'Now, activate your physical Tapect card by scanning the QR code printed on it. Simply scan the code in the Tapect Portal, and your digital profile will be linked and ready to share with just a tap!',
     imageUrl: '/how-to-us/Register-in-the-Tapect-Console.webp',
   },
-]
+];
 
-export default async function Howtous() {
-    const pathname = "/features";
-    const seoData = await getSEOData(pathname);
+export default async function HowToUsePage() {
+  const pathname = "/getting-started";
+  const seoData = await getSEOData(pathname);
+
   return (
     <>
       <StructuredData pathname={pathname} seoData={seoData} />
@@ -91,7 +94,7 @@ export default async function Howtous() {
 
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/2 space-y-8">
-              {Howtousdata.filter((_, i) => i % 2 === 0).map((step, i) => (
+              {HowToUseSteps.filter((_, i) => i % 2 === 0).map((step, i) => (
                 <div key={i} className="bg-[#F5F8FE] p-7 rounded-16 shadow-md">
                   <div className="space-y-4">
                     <h3 className="text-primary Title-18">{step.step}</h3>
@@ -108,7 +111,7 @@ export default async function Howtous() {
             </div>
 
             <div className="w-full md:w-1/2 space-y-8">
-              {Howtousdata.filter((_, i) => i % 2 !== 0).map((step, i) => (
+              {HowToUseSteps.filter((_, i) => i % 2 !== 0).map((step, i) => (
                 <div
                   key={i}
                   className={`bg-[#F5F8FE] p-7 rounded-16 shadow-md ${
@@ -136,5 +139,5 @@ export default async function Howtous() {
         </div>
       </section>
     </>
-  )
+  );
 }

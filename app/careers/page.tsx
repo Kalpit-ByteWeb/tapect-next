@@ -4,15 +4,24 @@ import BenefitsPerks from "@/components/layouts/BenefitsPerks";
 import JobOpenings from "@/components/layouts/Jobs/JobOpenings";
 import WorkBetterSection from "@/components/layouts/Jobs/WorkBetterSection";
 import ShimmerCartPage from "@/components/layouts/Shimmar/ShimmerHomePage";
+
 import {
-  fetchCentraliedSection,
-  fetchFeatures,
-  fetchPages,
+  fetchCentraliedSection as fetchCentral,
+  fetchFeatures as fetchFeature,
+  fetchPages as fetchPage,
 } from "@/components/api/ContentAPI";
+import { getSEOData as fetchSEO } from "@/libs/Assets/seo";
 import { description } from "@/libs/Assets/helper";
 import { getDomain } from "@/libs/Assets/DomainWiseData";
-import { getSEOData } from "@/libs/Assets/seo";
 import { Metadata } from "next";
+import { unstable_cache } from "next/cache";
+
+export const revalidate = 60;
+
+const getPages = unstable_cache(fetchPage, ['careers-pages'], { revalidate });
+const getFeatures = unstable_cache(fetchFeature, ['careers-features'], { revalidate });
+const getCentral = unstable_cache(fetchCentral, ['careers-central'], { revalidate });
+const getSEOData = unstable_cache(fetchSEO, ['careers-seo'], { revalidate });
 
 export async function generateMetadata(): Promise<Metadata> {
   const pathname = "/careers";
@@ -29,9 +38,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoData.metaTitle,
     description: seoData.metaDescription,
     robots: seoData.metaRobots,
-     alternates: {
-    canonical: seoData.canonicalURL,
-     },
+    alternates: {
+      canonical: seoData.canonicalURL,
+    },
     openGraph: {
       title: seoData.openGraph?.ogTitle || seoData.metaTitle,
       description: seoData.openGraph?.ogDescription || seoData.metaDescription,
@@ -59,13 +68,12 @@ export default async function CareersPage() {
 
   try {
     const [pagesRes, featuresRes, centralRes] = await Promise.all([
-      fetchPages(domain),
-      fetchFeatures(domain),
-      fetchCentraliedSection(domain),
+      getPages(domain),
+      getFeatures(domain),
+      getCentral(domain),
     ]);
 
-    const getPage = (res: any) =>
-      res.data.find((p: any) => p.PageName === "Careers");
+    const getPage = (res: any) => res.data.find((p: any) => p.PageName === "Careers");
 
     const pageData = getPage(pagesRes);
     const featureDataRaw =
