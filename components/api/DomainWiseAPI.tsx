@@ -1,7 +1,7 @@
 import { getDomain, getLocaleByDomain } from "@/libs/Assets/DomainWiseData";
 
 const API_URL_ENV = process.env.NEXT_PUBLIC_API_URL;
-
+console.log(API_URL_ENV);
 // ✅ Now accepts optional `domain` as 3rd argument for SSR use
 export const buildApiUrl = (
   layoutPath = "",
